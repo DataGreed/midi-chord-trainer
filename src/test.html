@@ -6,8 +6,8 @@
 
     <!-- https://webmidijs.org/ -->
     <script src="https://cdn.jsdelivr.net/npm/webmidi@latest/dist/iife/webmidi.iife.js"></script>
-
-    <script src="midi.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tonal/browser/tonal.min.js"></script>
+    <script type="module" src="midi.js"></script>
     <script src="trainer.js"></script>
 
 </head>
@@ -16,9 +16,11 @@
 <h1>Midi devices</h1>
 <div id="midi-devices">&nbsp;</div>
 <h1>Chord to play</h1>
-<div id="chord-to-play"></div>
+<div id="chord-to-play">&nbsp;</div>
 <h1>Currently pressed keys</h1>
-<div id="held-notes"></div>
+<div id="held-notes">&nbsp;</div>
+<h1>Currently held chord</h1>
+<div id="held-chord">&nbsp;</div>
 
 </body>
 

@@ -7,9 +7,11 @@ WebMidi
 let deviceElement;
 let chordToPlayElement;
 let heldNotesElement;
+let heldChordElement;
 
 let currentlyHeldNotes = new Set();
-let currentlyHeldKeys = new Set();;
+let currentlyHeldKeys = new Set();
+
 
 // Function triggered when WEBMIDI.js is ready
 function onEnabled() {
@@ -17,6 +19,7 @@ function onEnabled() {
     deviceElement = document.getElementById("midi-devices");
     chordToPlayElement = document.getElementById("chord-to-play");
     heldNotesElement = document.getElementById("held-notes");
+    heldChordElement = document.getElementById("held-chord");
 
     // Display available MIDI input devices
     if (WebMidi.inputs.length < 1) {
@@ -68,5 +71,7 @@ function redrawHeldNotes()
         heldNotesText +=note + " "
     })
 
-    heldNotesElement.innerHTML=heldNotesText
+    heldNotesElement.innerHTML=heldNotesText + "&nbsp;"
+
+    heldChordElement.innerHTML = Tonal.Chord.detect(Array.from(currentlyHeldNotes)).join(" or ") + "&nbsp;"
 }
