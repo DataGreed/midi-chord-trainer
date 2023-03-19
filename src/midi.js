@@ -15,9 +15,17 @@ let currentlyHeldKeys = new Set();
 let chordToPlay = "";
 let lastDetectedChords = [];
 
+var notyf;
 
 // Function triggered when WEBMIDI.js is ready
 function onEnabled() {
+
+    notyf = new Notyf({
+        duration: 800,
+        position: {
+            x: 'center',
+            y: 'top'
+        }});
 
     deviceElement = document.getElementById("midi-devices");
     chordToPlayElement = document.getElementById("chord-to-play");
@@ -52,7 +60,7 @@ function onEnabled() {
 
 function NoteOnHandler(e)
 {
-    console.log(e)
+    // console.log(e)
     currentlyHeldNotes.add(e.note.identifier)
     currentlyHeldKeys.add(e.note.number)
     redrawHeldNotes()
@@ -62,7 +70,7 @@ function NoteOnHandler(e)
 
 function NoteOffHandler(e)
 {
-    console.log(e)
+    // console.log(e)
     currentlyHeldNotes.delete(e.note.identifier)
     currentlyHeldKeys.delete(e.note.number)
     redrawHeldNotes()
@@ -116,14 +124,14 @@ function checkIfCorrectAndProceed()
             detectedChords.push(ch)
         }
         else{
-            detectedChords.concat(ch.split("/")[0])
+            detectedChords = detectedChords.concat(ch.split("/")[0])
         }
     })
 
 
     if(detectedChords.includes(expectedChord))
     {
-        console.log(`Correct! Expected: ${expectedChord}; Got: ${detectedChords}`)
+        console.log(`Correct! Expected: ${expectedChord}; Got: ${detectedChords}; Raw: ${lastDetectedChords}`)
         let nextChord = getNextRandomChord();
         while (nextChord===chordToPlay)
         {
@@ -132,9 +140,11 @@ function checkIfCorrectAndProceed()
         }
         chordToPlay = nextChord;
         redrawChordToPlay();
+
+        notyf.success("Correct!");
     }
     else {
-        console.log(`Incorrect. Expected: ${expectedChord}; Got: ${detectedChords}`)
+        console.log(`Incorrect. Expected: ${expectedChord}; Got: ${detectedChords}; Raw: ${lastDetectedChords}`)
     }
 
 
