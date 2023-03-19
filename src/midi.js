@@ -12,6 +12,9 @@ let heldChordElement;
 let currentlyHeldNotes = new Set();
 let currentlyHeldKeys = new Set();
 
+let chordToPlay = "";
+let lastDetectedChords = [];
+
 
 // Function triggered when WEBMIDI.js is ready
 function onEnabled() {
@@ -42,7 +45,8 @@ function onEnabled() {
     mySynth.channels[1].addListener("noteon", NoteOnHandler)
     mySynth.channels[1].addListener("noteoff", NoteOffHandler)
 
-    chordToPlayElement.innerHTML = getNextRandomChord()
+    chordToPlay = getNextRandomChord()
+    redrawChordToPlay()
 
 }
 
@@ -52,6 +56,8 @@ function NoteOnHandler(e)
     currentlyHeldNotes.add(e.note.identifier)
     currentlyHeldKeys.add(e.note.number)
     redrawHeldNotes()
+
+    checkIfCorrectAndProceed();
 }
 
 function NoteOffHandler(e)
@@ -60,6 +66,11 @@ function NoteOffHandler(e)
     currentlyHeldNotes.delete(e.note.identifier)
     currentlyHeldKeys.delete(e.note.number)
     redrawHeldNotes()
+}
+
+function redrawChordToPlay()
+{
+    chordToPlayElement.innerHTML = chordToPlay;
 }
 
 function redrawHeldNotes()
@@ -73,5 +84,59 @@ function redrawHeldNotes()
 
     heldNotesElement.innerHTML=heldNotesText + "&nbsp;"
 
-    heldChordElement.innerHTML = Tonal.Chord.detect(Array.from(currentlyHeldNotes)).join(" or ") + "&nbsp;"
+
+    lastDetectedChords = Tonal.Chord.detect(Array.from(currentlyHeldNotes));
+    heldChordElement.innerHTML = lastDetectedChords.join(" or ") + "&nbsp;";
+}
+
+function checkIfCorrectAndProceed()
+{
+    //Tonal represents major chords with a capital "M" at the end, e.g. EM instead of E.
+    //bring it to format
+    let expectedChord = chordToPlay;
+    if(chordToPlay.length===1)
+    {
+        expectedChord+="M";
+    }else if(chordToPlay.length===2 && chordToPlay.endsWith("#"))
+    {
+        expectedChord+="M";
+    }
+
+
+    //tonal sometimes gives different chord results depending on the order of notes passed
+    //in chord detector (which does not make any sens really - it seems it ignores the octave number in them)
+    //so sometimes it gives slash chords (https://en.wikipedia.org/wiki/Slash_chord)
+    // instead of regular ones. Lets just count them as regular.
+    //to do this we will split the slash chord and get only the first part of it.
+    //todo: maybe we should order the notes by their correct octave starting with C before detecting the chord?
+    let detectedChords=[];
+    lastDetectedChords.forEach((ch, i) => {
+        if(ch.indexOf("/") <0 )
+        {
+            detectedChords.push(ch)
+        }
+        else{
+            detectedChords.concat(ch.split("/")[0])
+        }
+    })
+
+
+    if(detectedChords.includes(expectedChord))
+    {
+        console.log(`Correct! Expected: ${expectedChord}; Got: ${detectedChords}`)
+        let nextChord = getNextRandomChord();
+        while (nextChord===chordToPlay)
+        {
+            //we should not show to similar chords in a row
+            nextChord = getNextRandomChord();
+        }
+        chordToPlay = nextChord;
+        redrawChordToPlay();
+    }
+    else {
+        console.log(`Incorrect. Expected: ${expectedChord}; Got: ${detectedChords}`)
+    }
+
+
+
 }

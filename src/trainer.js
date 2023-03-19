@@ -13,6 +13,11 @@ let chordsToTrain = [
     "G#", "G#m",
 ]
 
+if(chordsToTrain.length<2)
+{
+    throw Error("chordsToTrain has to be at lest 2 elements long and have different chords")
+}
+
 /**
  * Returns random element from the passed array
  */
