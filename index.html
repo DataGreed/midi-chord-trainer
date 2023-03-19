@@ -13,18 +13,34 @@
     <script src="midi.js"></script>
     <script src="trainer.js"></script>
 
+    <link rel="stylesheet" href="main.css">
+
 </head>
 <body>
 
-<h1>Midi devices</h1>
-<div id="midi-devices">&nbsp;</div>
-<h1>Chord to play</h1>
-<div id="chord-to-play">&nbsp;</div>
-<h1>Currently pressed keys</h1>
-<div id="held-notes">&nbsp;</div>
-<h1>Currently held chord</h1>
-<div id="held-chord">&nbsp;</div>
+<div class="content">
+    <div class="task-card">
+        <h1>Chord to play</h1>
+        <div id="chord-to-play">&nbsp;</div>
+    </div>
 
+    <div class="row">
+        <div class="card">
+            <h2>Midi devices</h2>
+            <div id="midi-devices">&nbsp;</div>
+        </div>
+
+        <div class="card">
+            <h2>Currently pressed keys</h2>
+            <div id="held-notes">&nbsp;</div>
+        </div>
+
+        <div class="card">
+            <h2>Currently held chord</h2>
+            <div id="held-chord">&nbsp;</div>
+        </div>
+    </div>
+</div>
 </body>
 
 <script>

@@ -1,0 +1,39 @@
+body{
+    font-family: sans-serif;
+    background-color: #b9c7d5;
+}
+
+h1{
+    font-size: x-large;
+}
+
+h2{
+    font-size: large;
+}
+
+.content{
+    width: 80%;
+    background-color: white;
+    margin: 50px auto ;   /*centers block*/
+    padding: 20px 40px;
+    border-radius: 15px;
+}
+
+.row{
+    display: flex;
+    flex-direction: row;
+}
+
+.card{
+    flex-grow: 1;
+}
+
+.task-card{
+    text-align: center;
+    margin: 50px 50px;
+}
+
+#chord-to-play {
+    padding: 50px 50px;
+    font-size: xxx-large;
+}
